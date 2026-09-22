@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Strength Analyzer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 400px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .weak {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .strong {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        ul {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Password Strength Analyzer</h1>
+
+        <p class="description">
+            Check the strength of your password
+        </p>
+
+        <label for="password">Enter Password:</label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+        >
+
+        <button onclick="checkPassword()">
+            Check Password
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script>
+
+        function checkPassword() {
+
+            let password = document.getElementById("password").value;
+            let result = document.getElementById("result");
+
+            let score = 0;
+            let suggestions = [];
+
+            // Check password length
+            if (password.length >= 8) {
+                score++;
+            } else {
+                suggestions.push("Use at least 8 characters.");
+            }
+
+            // Check uppercase letter
+            if (/[A-Z]/.test(password)) {
+                score++;
+            } else {
+                suggestions.push("Add an uppercase letter.");
+            }
+
+            // Check lowercase letter
+            if (/[a-z]/.test(password)) {
+                score++;
+            } else {
+                suggestions.push("Add a lowercase letter.");
+            }
+
+            // Check number
+            if (/[0-9]/.test(password)) {
+                score++;
+            } else {
+                suggestions.push("Add a number.");
+            }
+
+            // Check special character
+            if (/[^A-Za-z0-9]/.test(password)) {
+                score++;
+            } else {
+                suggestions.push("Add a special character.");
+            }
+
+            // Display result
+            result.style.display = "block";
+
+            if (password.length === 0) {
+
+                result.className = "weak";
+
+                result.innerHTML = `
+                    <strong>Please enter a password.</strong>
+                `;
+
+                return;
+            }
+
+            if (score <= 2) {
+
+                result.className = "weak";
+
+                result.innerHTML = `
+                    <strong>Password Strength: WEAK</strong>
+                    <ul>
+                        ${suggestions.map(item => `<li>${item}</li>`).join("")}
+                    </ul>
+                `;
+
+            } else if (score <= 4) {
+
+                result.className = "medium";
+
+                result.innerHTML = `
+                    <strong>Password Strength: MEDIUM</strong>
+                    <ul>
+                        ${suggestions.map(item => `<li>${item}</li>`).join("")}
+                    </ul>
+                `;
+
+            } else {
+
+                result.className = "strong";
+
+                result.innerHTML = `
+                    <strong>Password Strength: STRONG</strong>
+                    <p>Your password meets all the basic strength requirements.</p>
+                `;
+            }
+        }
+
+    </script>
+
+</body>
+</html>
